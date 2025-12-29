@@ -43,6 +43,7 @@ interface TaskListViewProps {
   onStatusChange: (taskId: string, status: TaskStatus) => void;
   onToggleComplete: (task: Task) => void;
   initialStatusFilter?: string;
+  initialOwnerFilter?: string;
 }
 
 const priorityColors = {
@@ -73,11 +74,12 @@ export const TaskListView = ({
   onStatusChange,
   onToggleComplete,
   initialStatusFilter = 'all',
+  initialOwnerFilter = 'all',
 }: TaskListViewProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>(initialStatusFilter);
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
-  const [assignedToFilter, setAssignedToFilter] = useState<string>('all');
+  const [assignedToFilter, setAssignedToFilter] = useState<string>(initialOwnerFilter);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
 
@@ -85,6 +87,11 @@ export const TaskListView = ({
   useEffect(() => {
     setStatusFilter(initialStatusFilter);
   }, [initialStatusFilter]);
+
+  // Sync assignedToFilter when initialOwnerFilter prop changes (from URL)
+  useEffect(() => {
+    setAssignedToFilter(initialOwnerFilter);
+  }, [initialOwnerFilter]);
 
   const assignedToIds = [...new Set(tasks.map(t => t.assigned_to).filter(Boolean))] as string[];
   const createdByIds = [...new Set(tasks.map(t => t.created_by).filter(Boolean))] as string[];
