@@ -1085,28 +1085,28 @@ const UserDashboard = () => {
               <div className="grid grid-cols-2 gap-1.5">
                 <div 
                   className="text-center p-2 bg-blue-50 dark:bg-blue-950/20 rounded cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-950/40 transition-colors"
-                  onClick={(e) => { e.stopPropagation(); navigate('/meetings?status=scheduled'); }}
+                  onClick={(e) => { e.stopPropagation(); navigate('/meetings?status=scheduled&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-blue-600">{upcomingMeetings?.byStatus?.scheduled || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Scheduled</p>
                 </div>
                 <div 
                   className="text-center p-2 bg-yellow-50 dark:bg-yellow-950/20 rounded cursor-pointer hover:bg-yellow-100 dark:hover:bg-yellow-950/40 transition-colors"
-                  onClick={(e) => { e.stopPropagation(); navigate('/meetings?status=ongoing'); }}
+                  onClick={(e) => { e.stopPropagation(); navigate('/meetings?status=ongoing&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-yellow-600">{upcomingMeetings?.byStatus?.ongoing || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Ongoing</p>
                 </div>
                 <div 
                   className="text-center p-2 bg-green-50 dark:bg-green-950/20 rounded cursor-pointer hover:bg-green-100 dark:hover:bg-green-950/40 transition-colors"
-                  onClick={(e) => { e.stopPropagation(); navigate('/meetings?status=completed'); }}
+                  onClick={(e) => { e.stopPropagation(); navigate('/meetings?status=completed&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-green-600">{upcomingMeetings?.byStatus?.completed || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Completed</p>
                 </div>
                 <div 
                   className="text-center p-2 bg-red-50 dark:bg-red-950/20 rounded cursor-pointer hover:bg-red-100 dark:hover:bg-red-950/40 transition-colors"
-                  onClick={(e) => { e.stopPropagation(); navigate('/meetings?status=cancelled'); }}
+                  onClick={(e) => { e.stopPropagation(); navigate('/meetings?status=cancelled&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-red-600">{upcomingMeetings?.byStatus?.cancelled || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Cancelled</p>
@@ -1129,28 +1129,28 @@ const UserDashboard = () => {
               <div className="grid grid-cols-2 gap-1.5">
                 <div 
                   className="text-center p-2 bg-blue-50 dark:bg-blue-950/20 rounded cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-950/40 transition-colors"
-                  onClick={(e) => { e.stopPropagation(); navigate('/tasks?status=open'); }}
+                  onClick={(e) => { e.stopPropagation(); navigate('/tasks?status=open&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-blue-600">{taskReminders?.byStatus?.open || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Open</p>
                 </div>
                 <div 
                   className="text-center p-2 bg-yellow-50 dark:bg-yellow-950/20 rounded cursor-pointer hover:bg-yellow-100 dark:hover:bg-yellow-950/40 transition-colors"
-                  onClick={(e) => { e.stopPropagation(); navigate('/tasks?status=in_progress'); }}
+                  onClick={(e) => { e.stopPropagation(); navigate('/tasks?status=in_progress&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-yellow-600">{taskReminders?.byStatus?.inProgress || 0}</p>
                   <p className="text-[10px] text-muted-foreground">In Progress</p>
                 </div>
                 <div 
                   className="text-center p-2 bg-green-50 dark:bg-green-950/20 rounded cursor-pointer hover:bg-green-100 dark:hover:bg-green-950/40 transition-colors"
-                  onClick={(e) => { e.stopPropagation(); navigate('/tasks?status=completed'); }}
+                  onClick={(e) => { e.stopPropagation(); navigate('/tasks?status=completed&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-green-600">{taskReminders?.byStatus?.completed || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Completed</p>
                 </div>
                 <div 
                   className="text-center p-2 bg-gray-50 dark:bg-gray-950/20 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-950/40 transition-colors"
-                  onClick={(e) => { e.stopPropagation(); navigate('/tasks?status=deferred'); }}
+                  onClick={(e) => { e.stopPropagation(); navigate('/tasks?status=deferred&owner=me'); }}
                 >
                   <p className="text-lg font-bold text-gray-600">{taskReminders?.byStatus?.deferred || 0}</p>
                   <p className="text-[10px] text-muted-foreground">Deferred</p>
