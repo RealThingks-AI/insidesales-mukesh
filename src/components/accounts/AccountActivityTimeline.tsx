@@ -66,50 +66,49 @@ export const AccountActivityTimeline = ({ accountId }: AccountActivityTimelinePr
   const fetchTimeline = async () => {
     setLoading(true);
     try {
-      // Fetch activities
-      const { data: activities } = await supabase
-        .from('account_activities')
-        .select('*')
-        .eq('account_id', accountId)
-        .order('activity_date', { ascending: false });
+      // Fetch all data in parallel for better performance
+      const [activitiesRes, contactsRes, dealsRes, leadsRes] = await Promise.all([
+        supabase
+          .from('account_activities')
+          .select('id, subject, description, activity_type, activity_date, outcome, duration_minutes')
+          .eq('account_id', accountId)
+          .order('activity_date', { ascending: false })
+          .limit(50),
+        supabase
+          .from('contacts')
+          .select('id, contact_name, email, position, created_time')
+          .eq('account_id', accountId)
+          .order('created_time', { ascending: false })
+          .limit(50),
+        supabase
+          .from('deals')
+          .select('id, deal_name, stage, total_contract_value, created_at')
+          .eq('account_id', accountId)
+          .order('created_at', { ascending: false })
+          .limit(50),
+        supabase
+          .from('leads')
+          .select('id, lead_name, lead_status, company_name, created_time')
+          .eq('account_id', accountId)
+          .order('created_time', { ascending: false })
+          .limit(50)
+      ]);
 
-      // Fetch contacts
-      const { data: contacts } = await supabase
-        .from('contacts')
-        .select('id, contact_name, email, position, created_time')
-        .eq('account_id', accountId)
-        .order('created_time', { ascending: false });
+      const activities = activitiesRes.data || [];
+      const contacts = contactsRes.data || [];
+      const deals = dealsRes.data || [];
+      const leads = leadsRes.data || [];
 
-      // Fetch deals by account_id (proper FK relationship)
-      const { data: dealData } = await supabase
-        .from('deals')
-        .select('id, deal_name, stage, total_contract_value, created_at')
-        .eq('account_id', accountId)
-        .order('created_at', { ascending: false });
-      const deals = dealData || [];
-
-      // Fetch leads associated with this account
-      const { data: leadData } = await supabase
-        .from('leads')
-        .select('id, lead_name, lead_status, company_name, created_time')
-        .eq('account_id', accountId)
-        .order('created_time', { ascending: false });
-      const leads = leadData || [];
-
-      // Fetch meetings for contacts linked to this account
-      const { data: accountContacts } = await supabase
-        .from('contacts')
-        .select('id')
-        .eq('account_id', accountId);
-      
+      // Fetch meetings using contact IDs from the contacts we already fetched (no duplicate query)
       let meetings: any[] = [];
-      if (accountContacts && accountContacts.length > 0) {
-        const contactIds = accountContacts.map(c => c.id);
+      const contactIds = contacts.map(c => c.id);
+      if (contactIds.length > 0) {
         const { data: meetingData } = await supabase
           .from('meetings')
           .select('id, subject, start_time, status, outcome')
           .in('contact_id', contactIds)
-          .order('start_time', { ascending: false });
+          .order('start_time', { ascending: false })
+          .limit(50);
         meetings = meetingData || [];
       }
 
@@ -117,7 +116,7 @@ export const AccountActivityTimeline = ({ accountId }: AccountActivityTimelinePr
       const items: TimelineItem[] = [];
 
       // Add activities
-      (activities || []).forEach(activity => {
+      activities.forEach(activity => {
         items.push({
           id: `activity-${activity.id}`,
           type: 'activity',
@@ -134,7 +133,7 @@ export const AccountActivityTimeline = ({ accountId }: AccountActivityTimelinePr
       });
 
       // Add contacts
-      (contacts || []).forEach(contact => {
+      contacts.forEach(contact => {
         items.push({
           id: `contact-${contact.id}`,
           type: 'contact',

@@ -83,6 +83,8 @@ interface TaskModalProps {
   onSubmit: (data: CreateTaskData) => Promise<any>;
   onUpdate?: (taskId: string, data: Partial<Task>, originalTask?: Task) => Promise<boolean>;
   context?: TaskModalContext;
+  /** Set to true when TaskModal is opened inside another Dialog to prevent focus trapping conflicts */
+  nested?: boolean;
 }
 
 export const TaskModal = ({
@@ -92,6 +94,7 @@ export const TaskModal = ({
   onSubmit,
   onUpdate,
   context,
+  nested = false,
 }: TaskModalProps) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -306,7 +309,7 @@ export const TaskModal = ({
   const isModuleLocked = context?.locked && context?.module;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange} modal={!nested}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{task ? 'Edit Task' : 'Create Task'}</DialogTitle>

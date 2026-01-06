@@ -211,7 +211,7 @@ export const AccountDetailModal = ({ open, onOpenChange, account, onUpdate, onEd
               </div>
             </TabsContent>
 
-            <TabsContent value="tasks" className="mt-4">
+            <TabsContent value="tasks" className="mt-4" forceMount hidden={activeTab !== 'tasks'}>
               <RelatedTasksSection 
                 moduleType="accounts"
                 recordId={account.id}
@@ -219,15 +219,15 @@ export const AccountDetailModal = ({ open, onOpenChange, account, onUpdate, onEd
               />
             </TabsContent>
 
-            <TabsContent value="timeline" className="mt-4">
+            <TabsContent value="timeline" className="mt-4" forceMount hidden={activeTab !== 'timeline'}>
               <AccountActivityTimeline key={refreshKey} accountId={account.id} />
             </TabsContent>
 
-            <TabsContent value="history" className="mt-4">
+            <TabsContent value="history" className="mt-4" forceMount hidden={activeTab !== 'history'}>
               <RecordChangeHistory entityType="accounts" entityId={account.id} maxHeight="400px" />
             </TabsContent>
 
-            <TabsContent value="associations" className="mt-4">
+            <TabsContent value="associations" className="mt-4" forceMount hidden={activeTab !== 'associations'}>
               <AccountAssociations 
                 accountId={account.id} 
                 companyName={account.company_name} 

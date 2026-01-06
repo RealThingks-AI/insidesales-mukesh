@@ -262,6 +262,7 @@ export const RelatedTasksSection = ({
           return result;
         }}
         context={{ module: moduleType, recordId, recordName, locked: true }}
+        nested={true}
       />
     </>
   );
