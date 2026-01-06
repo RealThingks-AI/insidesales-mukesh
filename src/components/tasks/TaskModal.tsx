@@ -295,12 +295,22 @@ export const TaskModal = ({
         deal_id: data.deal_id || undefined,
       };
 
+      let success = false;
+
       if (task && onUpdate) {
-        await onUpdate(task.id, taskData, task);
+        // onUpdate returns boolean - true on success, false on failure
+        success = await onUpdate(task.id, taskData, task);
       } else {
-        await onSubmit(taskData);
+        // onSubmit returns the created task or null on failure
+        const result = await onSubmit(taskData);
+        success = result !== null && result !== undefined;
       }
-      onOpenChange(false);
+
+      // Only close modal if operation succeeded
+      if (success) {
+        onOpenChange(false);
+      }
+      // If failed, modal stays open and useTasks already showed error toast
     } finally {
       setLoading(false);
     }
